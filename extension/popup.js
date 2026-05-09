@@ -22,12 +22,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 
         data.coupons.forEach(code => {
           const li = document.createElement("li");
-          li.textContent = code;
+          li.textContent = code.code;
           li.classList.add("coupon-item");
           li.title = "Click to copy";
 
           li.addEventListener("click", () => {
-            navigator.clipboard.writeText(code);
+            navigator.clipboard.writeText(code.code);
             li.textContent = "✓ Copied!";
             li.classList.add("copied");
             setTimeout(() => {
