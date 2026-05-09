@@ -31,7 +31,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             li.textContent = "✓ Copied!";
             li.classList.add("copied");
             setTimeout(() => {
-              li.textContent = code;
+              li.textContent = code.code;
               li.classList.remove("copied");
             }, 1500);
           });

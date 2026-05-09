@@ -32,11 +32,12 @@ app.get("/coupons", async (req, res) => {
   const cacheKey = site;
 
   // Check cache first
-  const cached = cache.get(cacheKey);
+  const cached = cache.get(cacheKey,coupon =>!coupon.expiry || new Date(coupon.expiry) > new Date());
   if (cached) {
     console.log("Cache hit:", cacheKey);
     return res.json({ site, coupons: cached, source: "cache" });
-  }
+    }
+    
 
   // Cache miss — ask Gemini
   console.log("Cache miss:", cacheKey);
