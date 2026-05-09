@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "CouponFinder",
+  "version": "1.0",
+  "description": "Finds coupons for online shopping sites",
+  "permissions": ["activeTab", "storage", "scripting", "tabs"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CouponFinder"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
