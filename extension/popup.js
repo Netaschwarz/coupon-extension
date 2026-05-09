@@ -10,7 +10,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 
     status.textContent = "Fetching coupons...";
 
-    fetch(`http://localhost:3000/coupons?site=${response.site}`)
+    fetch(`https://coupon-finder-backend-pf3n.onrender.com/coupons?site=${response.site}`)
       .then(res => res.json())
       .then(data => {
         if (data.coupons.length === 0) {
