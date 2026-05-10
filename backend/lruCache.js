@@ -2,6 +2,7 @@ class Node {
   constructor(key, value, expiryMs = 6 * 60 * 60 * 1000) {
     this.key = key;
     this.value = value;
+    this.expiry = Date.now()+expiryMs
     this.prev = null;
     this.next = null;
   }
@@ -23,8 +24,11 @@ class LRUCache {
     if (!this.map.has(key)) return null;
 
     const node = this.map.get(key);
-
-
+    if (node.expiry < Date.now()){
+      this._remove(node);
+      this.map.delete(key);
+      return null;
+    }
 
     // Move to front (most recently used)
     this._remove(node);
@@ -43,12 +47,12 @@ class LRUCache {
     return node.value;
   }
 
-  put(key, value) {
+  put(key, value, expiry) {
     if (this.map.has(key)) {
       this._remove(this.map.get(key));
     }
 
-    const node = new Node(key, value);
+    const node = new Node(key, value,expiry);
     this._insertAtFront(node);
     this.map.set(key, node);
 

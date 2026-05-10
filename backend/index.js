@@ -6,7 +6,15 @@ const ALLOWED_SITES = new Set([
   "asos", "hm", "nike", "gap", "oldnavy", 
   "target", "shein", "macys", "ebay", "nordstrom"
 ]);
-
+function getNodeExpiry(coupons){
+  max_date = new Date()
+  max_date.setDate(max_date.getDate()+30)
+  for(const coupon of coupons){
+    const expiryMs = coupon.expiry ? new Date(coupon.expiry).getTime() : max_date.getTime();
+    max_date = new Date(Math.max(expiryMs, max_date.getTime()));
+  }
+  return max_date-Date.now()
+}
 const app = express();
 const PORT = 3000;
 const cache = new LRUCache(100); // store up to 100 products
@@ -24,6 +32,10 @@ app.get("/coupons", async (req, res) => {
   if (!site) {
     return res.status(400).json({ error: "Missing site" });
   }
+  if(!ALLOWED_SITES.has(site)){
+    return res.status(400).json({ error: "Site not currently supported" });
+    
+  }
 
   const cacheKey = site;
 
@@ -39,7 +51,7 @@ app.get("/coupons", async (req, res) => {
   console.log("Cache miss:", cacheKey);
   try {
     const coupons = await findCoupons(site);
-    cache.put(cacheKey, coupons);
+    cache.put(cacheKey, coupons, getNodeExpiry(coupons));
     res.json({ site, coupons, source: "gemini" });
   } catch (err) {
     console.error("Gemini error:", err.message);
@@ -50,3 +62,4 @@ app.get("/coupons", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`CouponFinder backend running on port ${PORT}`);
 });
+

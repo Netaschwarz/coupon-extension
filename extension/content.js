@@ -3,14 +3,15 @@ const ALLOWED_SITES = new Set([
   "target", "shein", "macys", "ebay", "nordstrom"
 ]);
 function getProductInfo() {
-  const url = window.location.hostname; //url of user
+  const url = new URL(window.location.href).hostname; //url of user
 
   if (url.includes("com")) {
   
     const words = url.split('.');
     const siteName = words.at(-2);
+    if (ALLOWED_SITES.has(siteName)){
       return { site: siteName };
-      
+    }  
   }
   return null;
 }
