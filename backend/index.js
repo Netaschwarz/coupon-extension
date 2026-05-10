@@ -24,10 +24,6 @@ app.get("/coupons", async (req, res) => {
   if (!site) {
     return res.status(400).json({ error: "Missing site" });
   }
-  if(!ALLOWED_SITES.has(site)){
-    return res.status(400).json({ error: "Site not currently supported" });
-    
-  }
 
   const cacheKey = site;
 
