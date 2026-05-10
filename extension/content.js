@@ -9,9 +9,8 @@ function getProductInfo() {
   
     const words = url.split('.');
     const siteName = words.at(-2);
-    if (ALLOWED_SITES.has(siteName)){
       return { site: siteName };
-    }  
+      
   }
   return null;
 }
